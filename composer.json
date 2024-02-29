@@ -1,6 +1,6 @@
 {
     "name": "iteks/laravel-json",
-    "description": "A package to streamline the handling of JSON data in Laravel applications.",
+    "description": "Streamlines JSON data manipulation in Laravel, enabling effortless conversion of JSON to Laravel Collections or arrays. Tailored for Laravel developers who prioritize efficient JSON data handling. This utility is essential for projects that demand advanced JSON data processing.",
     "type": "library",
     "keywords": ["laravel","php", "json", "collection", "array", "data", "serialize"],
     "license": "MIT",

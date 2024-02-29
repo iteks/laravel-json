@@ -1,10 +1,16 @@
-# Laravel JSON
+<p align="center"><img src="https://raw.githubusercontent.com/iteks/art/master/logo-packages/laravel-json.svg" width="400" alt="Laravel JSON"></p>
 
-Laravel JSON is a helper suite developed to make working with JSON datasets in Laravel more streamlined.
+<p align="center">
+<a href="https://packagist.org/packages/iteks/laravel-json"><img src="https://img.shields.io/packagist/dt/iteks/laravel-json" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/iteks/laravel-json"><img src="https://img.shields.io/packagist/v/iteks/laravel-json" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/iteks/laravel-json"><img src="https://img.shields.io/packagist/l/iteks/laravel-json" alt="License"></a>
+</p>
+
+The `laravel-json` package, offered by iteks, streamlines JSON data manipulation in Laravel, enabling effortless conversion of JSON to Laravel Collections or arrays. Tailored for Laravel developers who prioritize efficient JSON data handling, it supports PHP 8.1+ and integrates seamlessly via Composer. This utility is essential for projects that demand advanced JSON data processing. For a detailed guide on installation and usage, explore the GitHub repository. Developed by <a href="https://github.com/jeramyhing">jeramyhing</a>.
 
 ## Get Started
 
-> **Requires [PHP 8.2+](https://php.net/releases/)**
+> **Requires [PHP 8.1+](https://php.net/releases/)**
 
 Install Laravel JSON via the [Composer](https://getcomposer.org/) package manager:
 
