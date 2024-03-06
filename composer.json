@@ -1,6 +1,6 @@
 {
     "name": "iteks/laravel-json",
-    "description": "Streamlines JSON data manipulation in Laravel, enabling effortless conversion of JSON to Laravel Collections or arrays. Tailored for Laravel developers who prioritize efficient JSON data handling. This utility is essential for projects that demand advanced JSON data processing.",
+    "description": "A Laravel package for simplified JSON data manipulation, offering seamless conversion to collections or arrays with attribute filtering.",
     "type": "library",
     "keywords": ["laravel","php", "json", "collection", "array", "data", "serialize"],
     "license": "MIT",
@@ -15,11 +15,9 @@
         "laravel/framework": "^9.46|^10.10|^11.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.23",
-        "laravel/pint": "^1.13",
-        "mockery/mockery": "^1.6",
-        "pestphp/pest": "^2.33",
-        "pestphp/pest-plugin-laravel": "^2.2",
+        "laravel/pint": "^1.14",
+        "pestphp/pest": "^2.34",
+        "pestphp/pest-plugin-arch": "^2.7",
         "phpstan/phpstan": "^1.10",
         "symfony/var-dumper": "^6.4"
     },
@@ -30,20 +28,26 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests"
         }
     },
     "scripts": {
-        "lint": "pint -v",
+        "pint:lint": "pint -v --test",
+        "pint:fix": "pint -v",
         "phpstan": [
-            "./vendor/bin/phpstan analyse src"
+            "phpstan analyse --ansi"
         ],
-        "test": "vendor/bin/pest"
+        "test": "pest --colors=always",
+        "test:all": [
+            "@pint:lint",
+            "@phpstan",
+            "@test"
+        ]
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Iteks\\Support\\ServiceProvider"
+                "Iteks\\Support\\JsonServiceProvider"
             ]
         }
     },

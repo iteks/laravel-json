@@ -12,6 +12,8 @@ class JsonService
     /**
      * Create a nested Collection from the given JSON file containing an array of objects.
      *
+     * @param  string  $path  The path to the JSON file.
+     * @param  string|null  $attribute  The attribute to use as the array keys.
      * @return Collection<int|string, mixed> The collection with mixed types for both keys and values.
      */
     public static function toCollection(string $path, ?string $attribute = null): Collection
@@ -34,6 +36,8 @@ class JsonService
     /**
      * Create a nested associative array from the given JSON file containing an array of objects.
      *
+     * @param  string  $path  The path to the JSON file.
+     * @param  string|null  $attribute  The attribute to use as the array keys.
      * @return array<int|string, mixed> The array with mixed types for both keys and values.
      */
     public static function toArray(string $path, ?string $attribute = null): array

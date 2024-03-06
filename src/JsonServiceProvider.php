@@ -4,18 +4,26 @@ declare(strict_types=1);
 
 namespace Iteks\Support;
 
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Support\ServiceProvider;
 use Iteks\Support\Services\JsonService;
 
-class ServiceProvider extends BaseServiceProvider
+class JsonServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('json', function () {
             return new JsonService();
         });
+    }
+
+    public function provides(): array
+    {
+        return [
+            'json',
+            JsonService::class,
+        ];
     }
 }
