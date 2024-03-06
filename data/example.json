@@ -1,0 +1,26 @@
+[
+  {
+      "border": "3px solid white",
+      "coordinates": [
+        51.70696,
+        40.34103
+      ],
+      "password": "xXeagle-*******"
+  },
+  {
+      "border": "1px dotted amber",
+      "coordinates": [
+        11.80583,
+        108.05094
+      ],
+      "password": "xXmeerkat-******"
+  },
+  {
+      "border": "4px dotted gray",
+      "coordinates": [
+        116.82882,
+        74.57905
+      ],
+      "password": "xXcat-*******"
+  }
+]
