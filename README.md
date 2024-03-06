@@ -6,7 +6,7 @@
 <a href="https://packagist.org/packages/iteks/laravel-json"><img src="https://img.shields.io/packagist/l/iteks/laravel-json" alt="License"></a>
 </p>
 
-The `laravel-json` package, offered by iteks, streamlines JSON data manipulation in Laravel, enabling effortless conversion of JSON to Laravel Collections or arrays. Tailored for Laravel developers who prioritize efficient JSON data handling, it supports PHP 8.1+ and integrates seamlessly via Composer. This utility is essential for projects that demand advanced JSON data processing. For a detailed guide on installation and usage, explore the GitHub repository. Developed by <a href="https://github.com/jeramyhing">jeramyhing</a>.
+The **Laravel JSON** package is a powerful and versatile tool designed to enhance the handling of JSON data within Laravel applications. With its intuitive API, developers can effortlessly convert JSON files into Laravel collections or associative arrays, facilitating easy data manipulation and access. Whether you're dealing with configuration files, dataset imports, or any JSON-formatted data source, this package simplifies the process, allowing you to focus on building feature-rich applications. Built with flexibility in mind, it supports optional attribute filtering, enabling precise data retrieval tailored to your needs. Perfect for projects of all sizes, **Laravel JSON** aims to streamline your development workflow, making JSON data handling a breeze. Offered by <a href="https://github.com/iteks/laravel-json">iteks</a>, Developed by <a href="https://github.com/jeramyhing">jeramyhing</a>.
 
 ## Get Started
 
@@ -21,14 +21,13 @@ composer require iteks/laravel-json
 ## Usage
 
 - [Sample JSON Dataset](#sample-json-dataset)
-- [toCollection()](#tocollection)
-- [toArray()](#toarray)
+- [JSON Helpers](#json-helpers)
+  - [Json::toCollection()](#jsontocollection)
+  - [Json::toArray()](#jsontoarray)
 
-### Sample Json Dataset
+## Sample Json Dataset
 
 ```json
-// test.json
-
 [
     {
         "border": "3px solid white",
@@ -57,17 +56,31 @@ composer require iteks/laravel-json
 ]
 ```
 
-### toCollection
+[top](#usage)
 
-`toCollection(string $path, ?string $attribute = null): Collection`
+## JSON Helpers
 
-Create a nested Collection from the given JSON file containing an array of objects.
+First, import the helper class:
 
 ```php
-$data = Json::toCollection(database_path('data/test.json'));
+use Iteks\Support\Facades\Json;
 ```
 
-Returns:
+You may then use the following methods:
+
+[top](#usage)
+
+### Json::toCollection()
+
+The `toCollection` method converts a JSON file into a Laravel collection of collections. This is particularly useful when you need to manipulate JSON data with the convenience and power of Laravel's Collection methods.
+
+#### Without Argument Usage
+
+When you use toCollection without specifying an attribute, it will simply convert the entire JSON file into a collection where each element is itself a collection representing the JSON objects.
+
+```php
+$collection = Json::toCollection(database_path('data/test.json'));
+```
 
 ```sh
 Illuminate\Support\Collection {#298 ▼
@@ -113,13 +126,21 @@ Illuminate\Support\Collection {#301 ▼
 }
 ```
 
-Get a collection containing just the values of a given attribute.
-
 ```php
-$data = Json::toCollection(database_path('data/test.json'), 'border');
+// Iterate over the collection
+foreach ($collection as $item) {
+    // Access properties like in any Laravel collection
+    echo $item->get('border');
+}
 ```
 
-Returns:
+#### With Argument Usage
+
+When you provide an attribute name as the second argument, toCollection will create a collection where each item is the value of the specified attribute from the JSON objects.
+
+```php
+$collection = Json::toCollection(database_path('data/test.json'), 'border');
+```
 
 ```sh
 Illuminate\Support\Collection {#297 ▼
@@ -132,18 +153,19 @@ Illuminate\Support\Collection {#297 ▼
 }
 ```
 
-### toArray
+[top](#usage)
 
-`toArray(string $path, ?string $attribute = null): array`
+### Json::toArray()
 
-Create a nested associative array from the given JSON file containing an array of objects.
+The `toArray` method converts a JSON file into a PHP array. This method is ideal for when you need a simple array representation of your JSON data for further processing or when Laravel's Collection methods are not necessary.
+
+#### Without Argument Usage
+
+Without specifying an attribute, toArray converts the entire JSON file into a nested array, with each element being an associative array representing the JSON objects.
 
 ```php
-$data = Json::toArray(database_path('data/test.json'));
+$array = Json::toArray(database_path('data/test.json'));
 ```
-
-Returns:
-
 
 ```sh
 array:3 [▼
@@ -174,13 +196,20 @@ array:3 [▼
 ]
 ```
 
-Get an array containing just the values of a given attribute.
-
 ```php
-$data = Json::toArray(database_path('data/test.json'), 'border');
+// Access the array directly
+foreach ($array as $item) {
+    echo $item['border'];
+}
 ```
 
-Returns:
+#### With Argument Usage
+
+Providing an attribute name as the second argument, toArray will generate an array containing only the values of the specified attribute from each JSON object.
+
+```php
+$array = Json::toArray(database_path('data/test.json'), 'border');
+```
 
 ```sh
 array:3 [▼
@@ -189,3 +218,5 @@ array:3 [▼
   2 => "4px dotted gray"
 ]
 ```
+
+[top](#usage)
