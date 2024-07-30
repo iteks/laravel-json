@@ -6,7 +6,9 @@
 <a href="https://packagist.org/packages/iteks/laravel-json"><img src="https://img.shields.io/packagist/l/iteks/laravel-json" alt="License"></a>
 </p>
 
-The **Laravel JSON** package is a powerful and versatile tool designed to enhance the handling of JSON data within Laravel applications. With its intuitive API, developers can effortlessly convert JSON files into Laravel collections or associative arrays, facilitating easy data manipulation and access. Whether you're dealing with configuration files, dataset imports, or any JSON-formatted data source, this package simplifies the process, allowing you to focus on building feature-rich applications. Built with flexibility in mind, it supports optional attribute filtering, enabling precise data retrieval tailored to your needs. Perfect for projects of all sizes, **Laravel JSON** aims to streamline your development workflow, making JSON data handling a breeze. Offered by <a href="https://github.com/iteks/laravel-json">iteks</a>, Developed by <a href="https://github.com/jeramyhing">jeramyhing</a>.
+The **Laravel JSON** package is a powerful and versatile tool designed to enhance the handling of JSON data within Laravel applications. With its intuitive API, developers can effortlessly convert JSON files into Laravel collections or associative arrays, facilitating easy data manipulation and access. Whether you're dealing with configuration files, dataset imports, or any JSON-formatted data source, this package simplifies the process, allowing you to focus on building feature-rich applications. Built with flexibility in mind, it supports optional attribute filtering, enabling precise data retrieval tailored to your needs. Additionally, enforce any JSON model column's data structure with column definitions, ensuring JSON data consistency with every interaction. Perfect for projects of all sizes, **Laravel JSON** aims to streamline your development workflow, making JSON data handling a breeze.
+
+Offered by <a href="https://github.com/iteks/laravel-json">iteks</a>, Developed by <a href="https://github.com/jeramyhing">jeramyhing</a>.
 
 ## Get Started
 
@@ -20,13 +22,22 @@ composer require iteks/laravel-json
 
 ## Usage
 
+Include the Json facade.
+
+```php
+use Iteks\Support\Facades\Json;
+```
+
 - [Sample JSON Dataset](#sample-json-dataset)
 - [JSON Helpers](#json-helpers)
   - [Json::toCollection()](#jsontocollection)
   - [Json::toArray()](#jsontoarray)
+- [JSON Trait (DefinesJsonColumns)](#json-trait-definesjsoncolumns)
   - [Json::enforceDefinition()](#enforcedefinition)
 
 ## Sample Json Dataset
+
+This JSON dataset is used in the [Json::toCollection()](#jsontocollection) and [Json::toArray()](#jsontoarray) method examples.
 
 ```json
 [
@@ -60,16 +71,6 @@ composer require iteks/laravel-json
 [top](#usage)
 
 ## JSON Helpers
-
-First, import the helper class:
-
-```php
-use Iteks\Support\Facades\Json;
-```
-
-You may then use the following methods:
-
-[top](#usage)
 
 ### Json::toCollection()
 
@@ -222,9 +223,11 @@ array:3 [▼
 
 [top](#usage)
 
-### Json::enforceDefinition()
+## JSON Trait (DefinesJsonColumns)
 
-The `enforceDefinition` method will allow you to define a JSON data structure for your JSON database columns. Simply apply the `DefinesJsonColumns` trait to your model that has JSON column(s) to define. Define the JSON structure with the `$jsonDefinitions` property on the model and begin using the `enforceDefinition` to enforce the column definition on your JSON input.
+The `DefinesJsonColumns` trait and complementary `enforceDefinition` method allow you to define and enforce a JSON data structure for your JSON database columns. This ensures that any interaction with a JSON data column will consistently contain data that is structured according to its JSON definitions.
+
+Simply apply the `DefinesJsonColumns` trait to your model that has JSON column(s) to define. Define the JSON structure with the `$jsonDefinitions` property on the model and begin using the `enforceDefinition` to enforce the column definition on your JSON input.
 
 Import the model trait and configure your JSON definitions.
 
@@ -257,7 +260,23 @@ class ExampleModel extends Model
 
 > You can configure definitions for multiple JSON columns.
 
-Usage in a form request's `prepareForValidation` method. Apply the `enforceDefinition` method on the target request attribute that contains the JSON input. Pass the model, column, and request attribute's JSON value.
+### Json::enforceDefinition()
+
+You can use the `enforceDefinition` method anywhere in your application logic with target JSON input that you intend to insert into your model's JSON column.
+
+```php
+$addressJson = json_encode($addressData);
+$enforcedJson = Json::enforceDefinition(ExampleModel::class, 'address', $addressJson);
+
+$exampleModel->address = $enforcedJson;
+$exampleModel->save();
+```
+
+> If the input JSON is `null` or missing any defined keys, the definition will still be enforced by adding the missing keys with `null` values. If the input JSON contains additional key value pairs that are not in the JSON column definition, they will be excluded.
+
+#### Usage in a form request's `prepareForValidation` method
+
+Apply the `enforceDefinition` method on the target request attribute that contains the JSON input. Pass the model class, column, and request attribute's JSON value.
 
 ```php
 namespace App\Http\Requests;
@@ -278,17 +297,5 @@ class ExampleFormRequest extends FormRequest
     }
 }
 ```
-
-You can use the `enforceDefinition` method anywhere in your application logic with target JSON input that you intend to insert into your model's JSON column.
-
-```php
-$addressJson = json_encode($addressData);
-$enforcedJson = Json::enforceDefinition(ExampleModel::class, 'address', $addressJson);
-
-$exampleModel->address = $enforcedJson;
-$exampleModel->save();
-```
-
-> If the input JSON is `null` or missing any defined keys, the definition will still be enforced by adding the missing keys with `null` values. If the input JSON contains additional key value pairs that are not in the JSON column definition, they will be excluded.
 
 [top](#usage)
