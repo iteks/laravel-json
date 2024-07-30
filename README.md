@@ -24,6 +24,7 @@ composer require iteks/laravel-json
 - [JSON Helpers](#json-helpers)
   - [Json::toCollection()](#jsontocollection)
   - [Json::toArray()](#jsontoarray)
+  - [Json::enforceDefinition()](#enforcedefinition)
 
 ## Sample Json Dataset
 
@@ -218,5 +219,76 @@ array:3 [▼
   2 => "4px dotted gray"
 ]
 ```
+
+[top](#usage)
+
+### Json::enforceDefinition()
+
+The `enforceDefinition` method will allow you to define a JSON data structure for your JSON database columns. Simply apply the `DefinesJsonColumns` trait to your model that has JSON column(s) to define. Define the JSON structure with the `$jsonDefinitions` property on the model and begin using the `enforceDefinition` to enforce the column definition on your JSON input.
+
+Import the model trait and configure your JSON definitions.
+
+```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Iteks\Support\Traits\DefinesJsonColumns;
+
+class ExampleModel extends Model
+{
+  use DefinesJsonColumns;
+
+  protected $jsonDefinitions = [
+    'profile' => [
+      'name' => 'string',
+      'age' => 'integer',
+      'avatar' => 'string',
+    ],
+    'address' => [
+      'street' => 'string',
+      'city' => 'string',
+      'state' => 'string',
+      'zip' => 'integer',
+      'geo_coordinates' => 'array',
+    ],
+  ];
+}
+```
+
+> You can configure definitions for multiple JSON columns.
+
+Usage in a form request's `prepareForValidation` method. Apply the `enforceDefinition` method on the target request attribute that contains the JSON input. Pass the model, column, and request attribute's JSON value.
+
+```php
+namespace App\Http\Requests;
+
+use App\Models\ExampleModel;
+use Illuminate\Foundation\Http\FormRequest;
+use Iteks\Support\Facades\Json;
+
+class ExampleFormRequest extends FormRequest
+{
+    protected function prepareForValidation(): self
+    {
+        $this->merge([
+            'request_attribute' => Json::enforceDefinition(ExampleModel::class, 'profile', $this->request_attribute),
+        ]);
+
+        return $this;
+    }
+}
+```
+
+You can use the `enforceDefinition` method anywhere in your application logic with target JSON input that you intend to insert into your model's JSON column.
+
+```php
+$addressJson = json_encode($addressData);
+$enforcedJson = Json::enforceDefinition(ExampleModel::class, 'address', $addressJson);
+
+$exampleModel->address = $enforcedJson;
+$exampleModel->save();
+```
+
+> If the input JSON is `null` or missing any defined keys, the definition will still be enforced by adding the missing keys with `null` values. If the input JSON contains additional key value pairs that are not in the JSON column definition, they will be excluded.
 
 [top](#usage)
